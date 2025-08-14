@@ -1,4 +1,4 @@
-# Last updated: 8/14/2025, 9:11:51 AM
+# Last updated: 8/14/2025, 9:41:15 AM
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -6,39 +6,56 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+    
+    def __init__(self):
+        self.left_vals = []
+        self.right_vals = []
 
-        if p == q:
+
+
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        
+        if root is None:
             return True
 
-        stack1 = [p]
-        stack2 = [q]
+        if root.left == None and root.right == None:
+            return True
 
-        while stack1 and stack2:
+        left = root.left
+        right = root.right
 
-            curr1 = stack1.pop(0)
-            curr2 = stack2.pop(0)
+        if left is not None and right is not None:
+            self.dfs_left(left)
+            self.dfs_right(right)
 
-            n1 = (curr1 == None)
-            n2 = (curr2 == None)
+            return True if self.left_vals == self.right_vals else False
 
-            if n1 or n2:
-                if n1 != n2:
-                    return False
-                else:
-                    continue
+        else:
+            return False
 
-            elif curr1.val != curr2.val:
-                return False
+    
 
-            
-            if curr1.left != None or curr1.right != None:
-                stack1.insert(0, curr1.right)
-                stack1.insert(0, curr1.left)
+    def dfs_left(self, node):
 
-            if curr2.left != None or curr2.right != None:
-                stack2.insert(0, curr2.right)
-                stack2.insert(0, curr2.left)
+        if node is None:
+            self.left_vals.append(None)
+            return
 
-        return True if (len(stack1) == 0) and (len(stack2) == 0) else False
-            
+        self.left_vals.append(node.val)
+
+        self.dfs_left(node.left)
+        self.dfs_left(node.right)
+
+
+
+    def dfs_right(self, node):
+
+
+        if node is None:
+            self.right_vals.append(None)  
+            return
+
+        self.right_vals.append(node.val)  
+
+        self.dfs_right(node.right)
+        self.dfs_right(node.left)
