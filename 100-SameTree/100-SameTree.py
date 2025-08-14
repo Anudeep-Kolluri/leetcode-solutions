@@ -1,4 +1,4 @@
-# Last updated: 8/14/2025, 8:35:37 AM
+# Last updated: 8/14/2025, 9:11:51 AM
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -7,42 +7,38 @@
 #         self.right = right
 class Solution:
     def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
-        # MUST USE BFS
 
         if p == q:
             return True
 
-        queue1 = [p]
-        queue2 = [q]
+        stack1 = [p]
+        stack2 = [q]
 
-        visited1 = []
-        visited2 = []
+        while stack1 and stack2:
 
-        while queue1 and queue2:
+            curr1 = stack1.pop(0)
+            curr2 = stack2.pop(0)
 
-            curr_1 = queue1.pop(0)
-            curr_2 = queue2.pop(0)
+            n1 = (curr1 == None)
+            n2 = (curr2 == None)
 
-            first = (curr_1 == None)
-            second = (curr_2 == None)
-
-            if first or second:
-                if first != second:
+            if n1 or n2:
+                if n1 != n2:
                     return False
                 else:
                     continue
 
-            elif curr_1.val != curr_2.val:
+            elif curr1.val != curr2.val:
                 return False
 
             
-            if curr_1.left != None or curr_1.right != None:
-                queue1.append(curr_1.left)
-                queue1.append(curr_1.right)
-            
-            if curr_2.left != None or curr_2.right != None:
-                queue2.append(curr_2.left)
-                queue2.append(curr_2.right)
+            if curr1.left != None or curr1.right != None:
+                stack1.insert(0, curr1.right)
+                stack1.insert(0, curr1.left)
 
-        
-        return True if (len(queue1) == 0) and (len(queue2) == 0) else False
+            if curr2.left != None or curr2.right != None:
+                stack2.insert(0, curr2.right)
+                stack2.insert(0, curr2.left)
+
+        return True if (len(stack1) == 0) and (len(stack2) == 0) else False
+            
